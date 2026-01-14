@@ -42,12 +42,36 @@ sudo chmod +x /usr/local/bin/mechsound
 
 echo "🔧 Mechsound skripti /usr/local/bin ga ko'chirildi va bajarish ruxsati berildi."
 
+# ~/.mechsounds papkasini yaratish
+MECHSOUNDS_DIR="$HOME/.mechsounds"
+mkdir -p "$MECHSOUNDS_DIR"
+
+echo "📁 ~/.mechsounds papkasi yaratildi."
+
+# configer.sh ni nusxalash
+cp "$(dirname "$0")/configer.sh" "$MECHSOUNDS_DIR/configer.sh"
+chmod +x "$MECHSOUNDS_DIR/configer.sh"
+
+echo "🔧 configer.sh ~/.mechsounds ga nusxalandi."
+
 # Sound fayllarini ~/.mechsounds ga nusxalash
-sudo cp -r "$(dirname "$0")/sounds" ~/.mechsounds/sounds
+cp -r "$(dirname "$0")/sounds" "$MECHSOUNDS_DIR/sounds"
 
 echo "📂 Tovush fayllari ~/.mechsounds ga nusxalandi."
 
-# .env nusxasi yaratamiz
-sudo cp "$(dirname "$0")/.env.example" ~/.mechsounds/.env
+# .env faylini yaratish
+ENV_FILE="$MECHSOUNDS_DIR/.env"
+if [ -f "$(dirname "$0")/.env.example" ]; then
+  cp "$(dirname "$0")/.env.example" "$ENV_FILE"
+  echo "📄 .env fayli .env.example dan nusxalandi."
+else
+  # Default .env faylini yaratish
+  cat > "$ENV_FILE" << 'EOF'
+# Mechsound sozlamalari
+VOLUME=50
+SOUND_PACK_NAME=cherrymx-blue-abs
+EOF
+  echo "📄 Default .env fayli yaratildi."
+fi
 
-echo "📄 .env fayli ~/.mechsounds ga nusxalandi."
+echo "✅ Barcha fayllar muvaffaqiyatli o'rnatildi."
